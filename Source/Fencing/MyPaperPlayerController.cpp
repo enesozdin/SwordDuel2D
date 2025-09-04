@@ -38,8 +38,6 @@ void AMyPaperPlayerController::Move(const FInputActionValue& Value)
 	FVector MovementVector = Value.Get<FVector>();
 	FVector RightVector = FVector::XAxisVector;
 	CurrentCharacter->AddMovementInput(RightVector, MovementVector.X);
-	//CurrentCharacter->AddMovementInput(RightVector, MovementVector.Y);
-	//CurrentCharacter->AddMovementInput(RightVector, MovementVector.Z);
 }
 
 //void AMyPaperPlayerController::Move(float Value)

@@ -7,13 +7,13 @@
 #include "MyPaperCharacter.generated.h"
 
 /**
- * 
+ *
  */
-UCLASS()
+UCLASS(Blueprintable)
 class FENCING_API AMyPaperCharacter : public APaperCharacter
 {
 	GENERATED_BODY()
-	
+
 	AMyPaperCharacter();
 
 protected:
@@ -37,6 +37,9 @@ protected:
 
 	void MoveRight(float InputValue);
 
-	
-	void UpdateWalkAnimation();
+	UFUNCTION(BlueprintNativeEvent)
+	bool UpdateWalkAnimation();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	TObjectPtr<UPaperFlipbookComponent> IdleAnimation;
 };

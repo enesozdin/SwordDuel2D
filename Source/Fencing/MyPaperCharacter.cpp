@@ -7,6 +7,8 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperFlipbook.h"
+#include "Engine/AssetManager.h"
 
 AMyPaperCharacter::AMyPaperCharacter() {
 	PrimaryActorTick.bCanEverTick = true;
@@ -44,12 +46,26 @@ void AMyPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	// PlayerEnhancedInputComponent->BindAxis("MoveRight",this, &AMyPaperCharacter::MoveRight);
 }
 
-void AMyPaperCharacter::UpdateWalkAnimation()
+bool AMyPaperCharacter::UpdateWalkAnimation_Implementation()
 {
+	bool IsWalking;
 	if (GetCharacterMovement()->Velocity.Size() > 0) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity: %f cm/s"), GetCharacterMovement()->Velocity.Size()));
-		//UPaperFlipbookComponent::SetFlipbook();
+		IsWalking = true;
+		//static const FString RunAssetPath = TEXT("/Script/Paper2D.PaperFlipbook'/Game/Flipbook/Warrior_Run.Warrior_Run'");
+		TObjectPtr<UPaperFlipbook> RunAnim = LoadObject<UPaperFlipbook>(nullptr, TEXT("/Script/Paper2D.PaperFlipbook'/Game/Flipbook/Warrior_Run.Warrior_Run'"));
+		Flipbook->SetFlipbook(RunAnim);
+		
 	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity: %f cm/s"), GetCharacterMovement()->Velocity.Size()));
+		IsWalking = false;
+		//static const FString IdleAssetPath = TEXT("/Script/Paper2D.PaperFlipbook'/Game/Flipbook/Warrior_Idle.Warrior_Idle'");
+		TObjectPtr<UPaperFlipbook> IdleAnim = LoadObject<UPaperFlipbook>(nullptr, TEXT("/Script/Paper2D.PaperFlipbook'/Game/Flipbook/Warrior_Idle.Warrior_Idle'"));
+		//static ConstructorHelpers::FObjectFinder<UPaperFlipbook> IdleAnimAsset(TEXT("/Script/Paper2D.PaperFlipbook'/Game/Flipbook/Warrior_Run.Warrior_Run'"));
+		Flipbook->SetFlipbook(IdleAnim);
+	}
+	return IsWalking;
 }
 
 //void AMyPaperCharacter::MoveRight(float InputValue) {
